@@ -27,7 +27,7 @@
     "gatsby-remark-external-links": "^0.0.4",
     "gatsby-source-filesystem": "^3.2.0",
     "gatsby-transformer-remark": "^3.2.0",
-    "graphql": "^15.5.0",
+    "graphql": "^15.6.0",
     "lodash.debounce": "^4.0.8",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@vercel/ncc": "^0.27.0",
     "eslint": "^6.8.0",
-    "prettier": "2.1.2"
+    "prettier": "2.4.1"
   },
   "repository": {
     "type": "git",
