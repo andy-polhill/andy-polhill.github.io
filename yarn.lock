@@ -5172,9 +5172,13 @@ graphql-ws@4.2.2:
   version "4.2.2"
   resolved "https://registry.npmjs.org/graphql-ws/-/graphql-ws-4.2.2.tgz"
 
-graphql@^15.4.0, graphql@^15.5.0:
+graphql@^15.4.0:
   version "15.5.0"
   resolved "https://registry.npmjs.org/graphql/-/graphql-15.5.0.tgz"
+
+graphql@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.0.0.tgz#5724f2767aefa543418e83671372117c39408c8f"
 
 gray-matter@^4.0.2:
   version "4.0.2"
