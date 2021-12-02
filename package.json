@@ -20,7 +20,7 @@
     "babel-eslint": "^10.1.0",
     "d3-scale": "^3.2.3",
     "gatsby": "^4.0.0-next",
-    "gatsby-link": "^3.13.0",
+    "gatsby-link": "^4.3.0",
     "gatsby-plugin-plausible": "^0.0.7",
     "gatsby-plugin-react-helmet": "^5.3.0",
     "gatsby-plugin-sharp": "^4.3.0",
