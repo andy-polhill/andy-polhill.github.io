@@ -8,19 +8,19 @@ export default function CommentForm({}) {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
-    const response = await fetch("https://europe-west2-andypolhill.cloudfunctions.net/comment-receiver", {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify({ body, name }) 
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
+    try {
+      const response = await fetch("https://europe-west2-andypolhill.cloudfunctions.net/receive_comment", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ body, name }) 
+      })
+      console.log(response);
+      return response.json(); // parses JSON response into native JavaScript objects
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   return (

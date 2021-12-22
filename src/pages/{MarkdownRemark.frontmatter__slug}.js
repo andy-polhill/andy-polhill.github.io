@@ -5,6 +5,7 @@ import { graphql } from "gatsby";
 import Page from "../components/page";
 import Hero from "../components/hero/hero";
 import Post from "../components/post/post";
+import CommentForm from "../components/commentForm/commentForm";
 
 export default function BlogPost({ data }) {
   const { frontmatter, html} = data.markdownRemark;
@@ -17,6 +18,7 @@ export default function BlogPost({ data }) {
         <small>{frontmatter.date}</small>
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </Post>
+      <CommentForm />
     </Page>
   );
 }

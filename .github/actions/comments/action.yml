@@ -4,7 +4,7 @@ inputs:
   name:
     description: "Name of the commentor"
     required: true
-  client_id:
+  body:
     description: "Body of the comment"
     required: true
 outputs:
