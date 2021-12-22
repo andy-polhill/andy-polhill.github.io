@@ -1,0 +1,15 @@
+name: 'Post comment'
+description: 'Post a comment from the log'
+inputs:
+  name:
+    description: "Name of the commentor"
+    required: true
+  client_id:
+    description: "Body of the comment"
+    required: true
+outputs:
+  status:
+    description: 'Status of the comment.'
+runs:
+  using: 'node12'
+  main: 'index.js'

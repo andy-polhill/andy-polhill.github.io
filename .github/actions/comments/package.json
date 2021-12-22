@@ -1,0 +1,9 @@
+{
+  "name": "comment-posting",
+  "private": true,
+  "description": "A github action to post comments to github issues",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}
