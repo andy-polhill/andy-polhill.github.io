@@ -3,6 +3,7 @@ title: Time for a change?
 slug: blog/time-for-a-change/
 author: Andy Polhill
 date: 2021-10-02
+discussionId: D_kwDOEZ2jC84AOZk_
 ---
 
 The average tenure in technology is widely estimated to be less than 3 years, compared to historical trends that isn't very long. We often have less of a physical attachment to the workplace than we used to, this can help reduce the friction when changing jobs. In this new world a courier may pick up your old laptop one day and deliver a new one the next, job done you are ready to go. Despite all of this, changing jobs is still a significant event, the relationships and habits that we have formed will be re-written overnight.

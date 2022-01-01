@@ -9,6 +9,9 @@ on:
       body:
         description: 'Body of the comment'
         required: true
+      discussionId:
+        description: 'ID of the discussion'
+        required: true
 
 jobs:
   post-comment:
@@ -18,42 +21,15 @@ jobs:
         id: post_discussion_comment
         with:
           query: |
-            mutation addDiscussionComment($body: String!) {
-              addDiscussionComment(input: {discussionId: "D_kwDOEZ2jC84AOW5B", body: $body}) {
+            mutation addDiscussionComment($discussion: ID!, $body: String!) {
+              addDiscussionComment(input: {discussionId: $discussion, body: $body}) {
                 comment {
                   id
                 }
               }
             }
+          discussion: "'${{github.event.inputs.discussionId}}'"
           body: ${{github.event.inputs.body}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-  # build:
-  #   needs: [post-comment]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Cache dependencies
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
-
-  #     - name: install dependencies
-  #       run: yarn install
-
-  #     - name: build
-  #       run: yarn build -- --prefix-paths
-
-  #     - name: deploy
-  #       uses: peaceiris/actions-gh-pages@v3
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_dir: ./public
+      - run: "echo 'new comment: ${{ steps.post_discussion_comment.outputs.data }}'"

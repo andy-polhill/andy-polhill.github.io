@@ -18,7 +18,9 @@ export default function BlogPost({ data }) {
         <small>{frontmatter.date}</small>
         <div dangerouslySetInnerHTML={{ __html: html }} />
       </Post>
-      <CommentForm />
+      <CommentForm
+        discussionId={frontmatter.discussionId}
+      />
     </Page>
   );
 }
@@ -29,7 +31,8 @@ BlogPost.propTypes = {
       html: PropTypes.string.isRequired,
       frontmatter: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired
+        date: PropTypes.string.isRequired,
+        discussionId: PropTypes.string.isRequired,
       }).isRequired
     }).isRequired
   }).isRequired
@@ -43,6 +46,7 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         slug
         title
+        discussionId
       }
     }
   }

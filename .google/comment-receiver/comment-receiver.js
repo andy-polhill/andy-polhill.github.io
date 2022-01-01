@@ -25,8 +25,14 @@ exports.receive_message = function(req, res) {
     return res.status(204).send('')
   }
    
-   if (req.method === 'POST') {
-    const { name, body } = req.body
+  if (req.method === 'POST') {
+    const { name, body, discussionId } = req.body
+
+    if(!discussionId) {
+      return res.status(422).send({
+        discussionId: "missing discussionId"
+      })
+    }
 
     if(!name) {
       return res.status(422).send({
@@ -40,11 +46,14 @@ exports.receive_message = function(req, res) {
       })
     }
 
+    console.log(`discussionId ${discussionId}`);
+
     return axios.post(github_actions_hook,
       {
         ref,
         inputs : {
           body,
+          discussionId,
           name
         }
       }, {

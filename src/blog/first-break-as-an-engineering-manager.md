@@ -3,6 +3,7 @@ title: Landing your first Engineering Manager role
 slug: blog/first-engineering-manager-role/
 author: Andy Polhill
 date: 2021-12-15
+discussionId: D_kwDOEZ2jC84AOZk5
 ---
 
 I recently participated in a fireside chat with [Adeva](https://adevait.com/events/from-software-developer-to-engineering-manager-mastering-the-transition). I covered a lot of content, possibly a bit too much. During my preparation I unearthed some topics that warrant a blog post in their own right. The first of which is how to land that first Engineering Manager role.
