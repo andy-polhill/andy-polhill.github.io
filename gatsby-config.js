@@ -20,6 +20,17 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-plugin-cname",
     {
+      resolve: `gatsby-source-github-api`,
+      options: {
+        url: "https://api.github.com/graphql", 
+        token: process.env.GITHUB_ACCESS_TOKEN,
+        graphQLQuery: githubApiQuery,
+        variables: {
+          github_login: process.env.GITHUB_LOGIN
+        }
+      }
+    },
+    {
       resolve: "gatsby-plugin-sitemap",
       options: {
         excludes: ["/about", "/null", "/dev-404-page/"]
