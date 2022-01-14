@@ -1,4 +1,5 @@
 import React from "react";
+import { MDXRenderer } from "gatsby-plugin-mdx"
 import { StaticQuery, graphql } from "gatsby";
 
 import * as styles from "./about.module.css";
@@ -8,7 +9,7 @@ export default function About() {
     <StaticQuery
       query={graphql`
         query AboutQuery {
-          markdownRemark(frontmatter: { slug: { eq: "about" } }) {
+          mdx(frontmatter: { slug: { eq: "about" } }) {
             html
             frontmatter {
               date(formatString: "MMMM DD, YYYY")
@@ -18,10 +19,11 @@ export default function About() {
           }
         }
       `}
-      render={({ markdownRemark }) => (
-        <section
-          className={ styles.about }
-          dangerouslySetInnerHTML={{ __html: markdownRemark.html }}>
+      render={({ mdx }) => (
+        <section className={ styles.about }>
+          <MDXRenderer>
+            {mdx}
+          </MDXRenderer>
         </section>
       )}
     />

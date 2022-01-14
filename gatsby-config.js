@@ -17,19 +17,29 @@ module.exports = {
   },
   pathPrefix: "/",
   plugins: [
+    // "source-plugin",
     "gatsby-plugin-sharp",
     "gatsby-plugin-cname",
-    {
-      resolve: `gatsby-source-github-api`,
-      options: {
-        url: "https://api.github.com/graphql", 
-        token: process.env.GITHUB_ACCESS_TOKEN,
-        graphQLQuery: githubApiQuery,
-        variables: {
-          github_login: process.env.GITHUB_LOGIN
-        }
-      }
-    },
+    "gatsby-remark-images",
+    // {
+    //   resolve: "source-plugin"
+    // },
+    // {
+    //   resolve: "gatsby-remark-github-discussions"
+    // },
+
+    // {
+    //   resolve: "gatsby-source-github-api",
+    //   options: {
+    //     url: "https://api.github.com/graphql", 
+    //     token: process.env.GITHUB_ACCESS_TOKEN,
+    //     graphQLQuery: githubDiscussionQuery,
+    //     variables: {
+    //       owner: process.env.OWNER,
+    //       repo: process.env.REPO,
+    //     }
+    //   }
+    // },
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
@@ -45,28 +55,17 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "content",
-        path: "./README.md",
-      },
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        name: "images",
-        path: `${__dirname}/src/images/`,
-      },
-    },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
         name: "blog",
         path: `${__dirname}/src/blog/`,
       },
     },
     {
-      resolve: "gatsby-transformer-remark",
+      resolve: "gatsby-plugin-mdx",
       options: {
-        plugins: [
+        gatsbyRemarkPlugins: [
+          {
+            resolve: "gatsby-github-discussion-plugin"
+          },
           {
             resolve: "gatsby-remark-images",
             options: {
@@ -83,6 +82,20 @@ module.exports = {
           }
         ]
       }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "content",
+        path: "./README.md",
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "images",
+        path: `${__dirname}/src/images/`,
+      },
     },
     "gatsby-plugin-react-helmet",
   ]

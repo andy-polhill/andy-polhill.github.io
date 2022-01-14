@@ -1,5 +1,7 @@
 {
   "cSpell.words": [
-    "andypolhill"
-  ]
+    "andypolhill",
+    "frontmatter"
+  ],
+  "debug.javascript.autoAttachFilter": "disabled"
 }
