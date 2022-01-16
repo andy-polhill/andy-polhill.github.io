@@ -11,7 +11,7 @@ exports.createResolvers = ({ createResolvers }) => {
       comments: {
         type: ["Comment"],
         resolve(source, args, context) {
-          return context.nodeModel.findAll({
+          return context.nodeModel.runQuery({
             query: {
               filter: {
                 discussionId: { eq: source.frontmatter.discussionId },

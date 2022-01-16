@@ -9,8 +9,8 @@ export default function About() {
     <StaticQuery
       query={graphql`
         query AboutQuery {
-          mdx(frontmatter: { slug: { eq: "about" } }) {
-            html
+          mdx(slug: { eq: "" }) {
+            body
             frontmatter {
               date(formatString: "MMMM DD, YYYY")
               slug
@@ -22,7 +22,7 @@ export default function About() {
       render={({ mdx }) => (
         <section className={ styles.about }>
           <MDXRenderer>
-            {mdx}
+            {mdx.body}
           </MDXRenderer>
         </section>
       )}

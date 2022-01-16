@@ -1,18 +1,30 @@
-const Comments = ({ data }) => {
-  console.log(data);
+import React from "react";
+import PropTypes from "prop-types";
+
+import Comment from "./comment";
+import CommentForm from "../commentForm/commentForm";
+
+const Comments = ({ comments, discussionId }) => {
+
   return (
-    <div>{ data }</div>
+    <section>
+      <h3>Comments</h3>
+      {comments.map(({body}, index) => (
+        <Comment key={index} body={body} />
+      ))}
+
+      <CommentForm discussionId={ discussionId } />
+    </section>
   )
 }
 
-// export const query = graphql`
-//   query CommentQuery($discussionId: String)
-//     site {
-//       siteMetadata {
-//         description
-//       }
-//     }
-//   }
-// `
+Comments.propTypes = {
+  comments: PropTypes.arrayOf(
+    PropTypes.shape({
+      body: PropTypes.string.isRequired
+    })
+  )
+}
+
 
 export default Comments;
