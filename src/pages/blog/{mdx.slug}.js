@@ -24,9 +24,9 @@ export default function BlogPost({ data }) {
           {body}
         </MDXRenderer>
       </Post>
-      <Comments
+      {/* <Comments
         comments={ comments }
-        discussionId={ discussionId } />
+        discussionId={ discussionId } /> */}
     </Page>
   );
 }
