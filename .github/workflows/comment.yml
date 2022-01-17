@@ -32,7 +32,7 @@ jobs:
               }
             }
           discussion: "'${{github.event.inputs.discussionId}}'"
-          body: ${{github.event.inputs.body}}
+          body: '"---\nauthor:${{github.event.inputs.name}}\nurl:${{github.event.inputs.url}}\n---\n${{github.event.inputs.body}}"'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'new comment: ${{ steps.post_discussion_comment.outputs.data }}'"

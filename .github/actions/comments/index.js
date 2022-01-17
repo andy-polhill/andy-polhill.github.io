@@ -7,6 +7,14 @@ try {
   const url = core.getInput('url');
   const issue_number = 28
 
+  console.log(`
+    ---
+    name: ${name}
+    url: ${url}
+    ---
+    ${body}
+  `)
+
   octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/comments', {
     owner: 'andy-polhill',
     repo: 'andy-polhill.github.io',
@@ -16,7 +24,7 @@ try {
     name: ${name}
     url: ${url}
     ---
-     ${body}
+    ${body}
     `
   }).then(response => {
     console.log(response.status)
