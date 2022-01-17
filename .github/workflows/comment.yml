@@ -9,6 +9,9 @@ on:
       body:
         description: 'Body of the comment'
         required: true
+      url:
+        description: 'Url of the commenter'
+        required: true
       discussionId:
         description: 'ID of the discussion'
         required: true

@@ -4,6 +4,8 @@ inputs:
   name:
     description: "Name of the commentor"
     required: true
+  name:
+    description: "URL for the commentor"
   body:
     description: "Body of the comment"
     required: true

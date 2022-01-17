@@ -6,9 +6,14 @@ export default function CommentForm({ discussionId }) {
 
   const [body, setBody] = useState("");
   const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    setBody("");
+    setName("");
+    setUrl("");
+
     try {
       const response = await fetch("https://europe-west2-andypolhill.cloudfunctions.net/receive_comment", {
         method: 'POST',
@@ -18,11 +23,11 @@ export default function CommentForm({ discussionId }) {
         body: JSON.stringify({
           body,
           discussionId,
-          name
+          name,
+          url
         }) 
       })
-      console.log(response);
-      return response.json(); // parses JSON response into native JavaScript objects
+      return response.json(); 
     } catch(error) {
       console.error(error);
     }
@@ -31,16 +36,26 @@ export default function CommentForm({ discussionId }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
+        Name
         <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
           />
-        <textarea
-          value={body}
-          onChange={e => setBody(e.target.value)}
-        />
       </label>
+      <label>
+        Link
+        <input
+            type="text"
+            value={url}
+            onChange={e => setUrl(e.target.value)}
+          />
+      </label>
+      <textarea
+        value={body}
+        onChange={e => setBody(e.target.value)}
+      />
+
       <input type="submit" value="Submit" />
     </form>
   )

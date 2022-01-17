@@ -26,7 +26,7 @@ exports.receive_message = function(req, res) {
   }
    
   if (req.method === 'POST') {
-    const { name, body, discussionId } = req.body
+    const { body, name, discussionId, url } = req.body
 
     if(!discussionId) {
       return res.status(422).send({
@@ -54,7 +54,8 @@ exports.receive_message = function(req, res) {
         inputs : {
           body,
           discussionId,
-          name
+          name,
+          url
         }
       }, {
         headers: {
