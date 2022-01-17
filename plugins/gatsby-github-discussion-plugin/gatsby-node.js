@@ -27,14 +27,17 @@ exports.createResolvers = ({ createResolvers }) => {
   createResolvers(resolvers);
 };
 
-exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
-  const { createNode, createTypes } = actions;
-
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
   createTypes(`
     type Comment implements Node {
       body: String
       discussionId: String
-    }`);
+    }`)
+}
+
+exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
+  const { createNode } = actions;
 
   try {
     const { repository } = await graphql(`{
