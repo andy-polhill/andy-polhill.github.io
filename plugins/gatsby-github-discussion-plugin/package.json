@@ -1,7 +1,7 @@
 {
   "name": "gatsby-github-discussion-plugin",
   "version": "1.0.0",
-  "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
+  "description": "A custom action to create Comments from Github Discussions",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,6 +11,6 @@
     "gatsby",
     "gatsby-plugin"
   ],
-  "author": "Kyle Gill <kyle.robert.gill@gmail.com>",
+  "author": "Andy Polhill ",
   "license": "0BSD"
 }

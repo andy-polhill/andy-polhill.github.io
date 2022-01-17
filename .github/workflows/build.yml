@@ -12,6 +12,23 @@ on:
 
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: install dependencies
+        run: yarn install
+
       - name: build
         run: yarn build -- --prefix-paths
 
@@ -51,30 +68,5 @@ jobs:
   #         client_id: ${{ secrets.SPOTIFY_ID }}
   #         client_secret: ${{ secrets.SPOTIFY_SECRET }}
 
-  build:
-    needs: [fetch-weather]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: install dependencies
-        run: yarn install
-
-      - name: build
-        run: yarn build -- --prefix-paths
-
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
 
