@@ -2,10 +2,10 @@
 
 ## Comments
 - [x] Pictures
-- [ ] Add url
-- [ ] Sanitise intputs
+- [x] Add url
+- [ ] Sanitise intputs / validate / max lengths
 - [ ] Dont build on failture of comment flow
-- [ ] Frontmatter parsing
+- [x] Frontmatter parsing
 - [ ] Approval
 - [ ] Render
 - [ ] Style
