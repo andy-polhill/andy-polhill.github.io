@@ -3,7 +3,9 @@
 ## Comments
 - [x] Pictures
 - [ ] Add url
-- [ ] Frontmatter
+- [ ] Sanitise intputs
+- [ ] Dont build on failture of comment flow
+- [ ] Frontmatter parsing
 - [ ] Approval
 - [ ] Render
 - [ ] Style
@@ -13,3 +15,4 @@
 - [x] Don't fetch weather on build
 - [ ] Form validation
 - [ ] Form pending state
+- [ ]Make the discussion queryt more performant, e.g. add a custom type

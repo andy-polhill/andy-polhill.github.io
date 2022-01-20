@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const matter = require("gray-matter");
 const { graphql } = require("@octokit/graphql");
 
 dotenv.config();
@@ -28,21 +29,24 @@ exports.createResolvers = ({ createResolvers }) => {
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions
+  const { createTypes } = actions;
   createTypes(`
     type Comment implements Node {
       body: String
       discussionId: String
-    }`)
-}
+      url: String
+      author: String
+    }`);
+};
 
 exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions;
+  const categoryId = "DIC_kwDOEZ2jC84CAyEg";
 
   try {
     const { repository } = await graphql(`{
       repository(owner: "${process.env.OWNER}", name: "${process.env.REPO}") {
-        discussions(first: 100) {
+        discussions(first: 100, categoryId: ${categoryId}) {
           edges {
             node {
               id,
@@ -69,23 +73,27 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => 
       const { comments, id: discussionId } = node;
       comments.edges.forEach(({ node }) => {
 
-        const nodeContent = JSON.stringify(node);
+        const comment = matter(node.body);
+
+        const nodeContent = JSON.stringify(comment);
         createNode({
           id: createNodeId(`comments-${node.id}`),
           parent: null,
           children: [],
           internal: {
-            type: `Comment`,
-            mediaType: `text/html`,
+            type: "Comment",
+            mediaType: "text/html",
             content: nodeContent,
-            contentDigest: createContentDigest(node),
+            contentDigest: createContentDigest(comment),
           },
-          body: node.body,
+          body: comment.content,
+          author: comment.data.author,
+          url: comment.data.url,
           discussionId, 
         });
-      })
-    })
+      });
+    });
   } catch(e) {
-    console.error(e)
+    console.error(e);
   }
 };
