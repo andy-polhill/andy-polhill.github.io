@@ -8,7 +8,7 @@ export default function Header({}) {
   return (
     <header className={ styles.header }>
       <nav className={ styles.nav }>
-        <ul>
+        <ul className={ styles.navList }>
           <li className={ styles.navItem }>
             <Link to="/">
               Home
@@ -20,10 +20,10 @@ export default function Header({}) {
             </Link>
           </li>
           <li className={` ${styles.navItem} ${styles.socialIcons}` }>
-            <a href="twitter.com/andy-polhill" target="_blank">
+            <a href="https://twitter.com/andy-polhill" target="_blank">
               <TwitterIcon />
             </a>
-            <a href="linkedin.com/in/andy-polhill" target="_blank">
+            <a href="https://linkedin.com/in/andy-polhill" target="_blank">
               <LinkedInIcon />
             </a>
           </li>
