@@ -66,6 +66,36 @@ module.exports = {
         extensions: [".md", ".mdx"],
         gatsbyRemarkPlugins: [
           {
+            resolve: 'gatsby-remark-mermaid',
+            options: {
+              language: 'mermaid',
+              theme: 'neutral',
+              mermaidOptions: {
+                themeCSS: `
+                  .node rect { fill: var(--color-mermaid-bg); }
+                  
+                  .node .label {
+                    font-family: \"Libre Baskeville\", Georgia, serif;
+                    color: var(--color-body)
+                  }
+
+                  .edgeLabels .edgeLabel {
+                    background-color: var(--sky-bottom);
+                    font-family: \"Libre Baskeville\", Georgia, serif;
+                    color: var(--color-body);
+                  }
+                `
+              }
+            }
+          },
+          {
+            resolve: "gatsby-remark-highlight-code",
+            options: {
+              terminal: "carbon",
+              theme: "one-light",
+            },
+          },
+          {
             resolve: "gatsby-github-discussion-plugin"
           },
           {

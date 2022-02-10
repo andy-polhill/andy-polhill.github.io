@@ -48,13 +48,16 @@
 }
 
 .social-icons svg {
-  fill: red;
   height: var(--text-md);
   fill: var(--color-link);
 }
 
-.social-icons:not(:last-child) {
-  margin-right: var(--space-xs);
+.social-icons a {
+  margin-right: var(--space-sm);
+}
+
+.social-icons a:last-child {
+  margin-right: 0;
 }
 
 

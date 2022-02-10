@@ -4,9 +4,10 @@
   --color-grey-dark: #887d8d;
   --color-grey-mid: #b8b4b2;
   --color-grey-light: #dcdac9;
+  --color-purple-light: #af5d8b;
   --color-purple: #5b3374;
   --color-purple-dark: #412051;
-  /* --color-light-blue: #89d9d9; */
+  --color-blue: #aeffff;
   --color-light-blue: #aeffff;
   --color-very-light-blue: #f4ffff;
   --color-white: #fff;
@@ -31,6 +32,8 @@
   --color-link-hover: var(--color-purple);
   --color-page: var(--sky-bottom);
 
+  --color-mermaid-bg: #72b6cf50;
+
   --page-width: 760px;
 
   /* https://medium.com/codyhouse/create-your-design-system-part-4-spacing-895c9213e2b9 */
@@ -51,10 +54,10 @@
   --cloud-foreground: #01162e;
   --cloud-background: #002746;
 
-  --color-heading: var(--color-light-blue);
-  --color-heading-emphasis: var(--color-light-blue);
+  --color-heading: var(--color-blue);
+  --color-heading-emphasis: var(--color-blue);
   --color-body: var(--color-white);
-  --color-link: var(--color-light-blue);
+  --color-link: var(--color-blue);
   --color-link-hover: var(--color-light);
   --color-page: var(--sky-bottom);
 }

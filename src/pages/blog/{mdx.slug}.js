@@ -2,7 +2,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
-import { MDXRenderer } from "gatsby-plugin-mdx"
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import { defineCustomElements as deckDeckGoHighlightElement } from "@deckdeckgo/highlight-code/dist/loader";
 
 import Page from "../../components/page";
 import Post from "../../components/post/post";
@@ -10,6 +11,9 @@ import Comments from "../../components/comments/comments";
 import Author from "../../components/author/author";
 import SEO from "../../components/seo/seo";
 import Rule from "../../components/rule/rule";
+
+deckDeckGoHighlightElement();
+
 
 export default function BlogPost({ data }) {
   const { body, comments, frontmatter } = data.mdx;

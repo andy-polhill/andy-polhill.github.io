@@ -40,7 +40,12 @@ jobs:
               }
             }
           discussion: "'${{github.event.inputs.discussionId}}'"
-          body: '"---\nauthor: ${{github.event.inputs.author}}\nurl: ${{github.event.inputs.url}}\n---\n${{github.event.inputs.body}}"'
+          body: |
+            ---
+            author: ${{github.event.inputs.author}}
+            url: ${{github.event.inputs.url}}
+            ---
+            ${{github.event.inputs.body}}"'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
