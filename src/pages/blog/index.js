@@ -49,7 +49,10 @@ Blog.propTypes = {
 
 export const pageQuery = graphql`
   query MyQuery {
-    blog: allMdx(filter: {fileAbsolutePath: {regex: "/(blog)/"  }}) {
+    blog: allMdx(
+        filter: { fileAbsolutePath: {regex: "/(blog)/"  }}
+        sort: { fields: [frontmatter___date, frontmatter___title], order: ASC }
+      ) {
       posts: nodes {
         frontmatter {
           date(fromNow: true)
