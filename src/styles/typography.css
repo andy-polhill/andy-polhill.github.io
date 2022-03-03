@@ -16,7 +16,7 @@
 
 :root {
   /* set base values */
-  --text-base-size: 1em;
+  --text-base-size: 1rem;
   --text-scale-ratio: 1.125;
 
   --text-xxs: calc(var(--text-base-size) / 1.5);
@@ -32,7 +32,7 @@
 @media (min-width: 768px) {
   :root {
     /* you can manage typography editing only these 2 variables */
-    --text-base-size: 1.2em;
+    --text-base-size: 1.2rem;
     --text-scale-ratio: 1.2;
   }
 }
