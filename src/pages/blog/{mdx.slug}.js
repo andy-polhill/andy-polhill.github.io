@@ -16,12 +16,14 @@ deckDeckGoHighlightElement();
 
 
 export default function BlogPost({ data }) {
-  const { body, comments, frontmatter } = data.mdx;
+  const { body, comments, description, frontmatter } = data.mdx;
   const { author, date, title, discussionId } = frontmatter;
 
   return (
     <Page>
-      <SEO title={ `${author} - ${title}` } />
+      <SEO
+        description={ description } 
+        title={ `${author} - ${title}` } />
       <Post>
         <h1>{ title }</h1>
         <Author
@@ -53,6 +55,7 @@ BlogPost.propTypes = {
         author: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
         discussionId: PropTypes.string.isRequired,
       }).isRequired
     }).isRequired
@@ -71,6 +74,7 @@ export const pageQuery = graphql`
       }
       frontmatter {
         date(formatString: "MMMM DD, YYYY")
+        description
         author
         slug
         title
