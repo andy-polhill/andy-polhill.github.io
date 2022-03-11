@@ -11,6 +11,7 @@ on:
         required: true
       url:
         description: 'Url of the commenter'
+        required: true
       discussionId:
         description: 'ID of the discussion'
         required: true
@@ -19,12 +20,13 @@ jobs:
   slack-notification:
     runs-on: ubuntu-latest
     steps:
-      - uses: rtCamp/action-slack-notify@v2
-        id: post_slack_notification
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: '"Body: ${{github.event.inputs.body}}\nAuthor: ${{github.event.inputs.author}}\URL: ${{github.event.inputs.url}}"'
-          SLACK_TITLE: "New Comment"
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} 
+        if: always()
   post-comment:
     runs-on: ubuntu-latest
     steps:
