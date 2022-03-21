@@ -1096,6 +1096,19 @@
   resolved "https://registry.yarnpkg.com/@braintree/sanitize-url/-/sanitize-url-3.1.0.tgz#8ff71d51053cd5ee4981e5a501d80a536244f7fd"
   integrity sha512-GcIY79elgB+azP74j8vqkiXz8xLFfIzbQJdlwOPisgbKT00tviJQuEghOXSMVxJ00HoYJbGswr4kcllUc4xCcg==
 
+"@deckdeckgo/highlight-code@^4.0.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@deckdeckgo/highlight-code/-/highlight-code-4.2.0.tgz#044da0594dedae9ce86228015b455d408e998752"
+  integrity sha512-Y1ukTIu35Hm6aOQtsh9h8yw/iwaEVhNPdQZQBzFrwnDhzrouVvI0dYyGFxuFHACm9EQV44sTRc93yPMxMSpOFg==
+  dependencies:
+    "@deckdeckgo/utils" "^5.1.0"
+    prismjs "^1.27.0"
+
+"@deckdeckgo/utils@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@deckdeckgo/utils/-/utils-5.1.0.tgz#ac1fc3c25ca6128bf13c1a4c6226cad540c8a164"
+  integrity sha512-ue/1BXkDBZ9k+Tqs3vyCRIjqxjPnl06ab9WGhGubAXoRtJIE7ZN58/pbLsPCYc4xFcY0TPH3tsWhE7eF/FU8Ew==
+
 "@endemolshinegroup/cosmiconfig-typescript-loader@3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@endemolshinegroup/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-3.0.2.tgz#eea4635828dde372838b0909693ebd9aafeec22d"
@@ -6148,10 +6161,10 @@ gatsby-plugin-cname@^1.0.0:
   resolved "https://registry.yarnpkg.com/gatsby-plugin-cname/-/gatsby-plugin-cname-1.0.0.tgz#5752d006c476a3c7897fca5c307901df5501747a"
   integrity sha512-U0yRgn4cm1zBi+qC5a827acPFnUqKSowoCvAxT3MDmMJVLSWB4vmSyM7m6ThVz35obO4nKr4iP4vZhvA7gEVsA==
 
-gatsby-plugin-layout@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-3.6.0.tgz#711c947a89de7136a0ccc53090d2e89d7359a361"
-  integrity sha512-NoYj1ZgxGCjtj9pMMX9HMxHVw9u5+i1Unh7E/QZlgzibPf+Y010ZfidzZiCP6maRCzw1S4GBESAoW2muJyG2xA==
+gatsby-plugin-layout@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-3.10.0.tgz#339f2edb9851fba8915201e310b3ac6b8bc9867b"
+  integrity sha512-cmgka1Z4PcvyeoxqJFyiD5OvJpg5Kwku3TVvBsSRBQtFtthIuLJ4H/lnNyDMwOk6Kqym4EQ20CSsGXsByAWVpg==
   dependencies:
     "@babel/runtime" "^7.15.4"
 
@@ -10158,6 +10171,11 @@ pretty-error@^2.1.2:
   dependencies:
     lodash "^4.17.20"
     renderkid "^2.0.4"
+
+prismjs@^1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.27.0.tgz#bb6ee3138a0b438a3653dd4d6ce0cc6510a45057"
+  integrity sha512-t13BGPUlFDR7wRB5kQDG4jjl7XeuH6jbJGt11JHPL96qwsEHNX2+68tFXqc1/k+/jALsbSWJKUOT/hcYAZ5LkA==
 
 probe-image-size@^6.0.0:
   version "6.0.0"
