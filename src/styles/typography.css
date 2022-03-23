@@ -70,6 +70,12 @@ h3 {
   margin-bottom: var(--space-sm);
 }
 
+h4 {
+  font-size: var(--text-md);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
 h1 + small,
 h2 + small {
   text-transform: uppercase;
