@@ -30,7 +30,7 @@ export default function BlogPost({ data }) {
           author={ author }
           date={ date } />
         <Rule />
-        <MDXRenderer>
+        <MDXRenderer inlineImages={frontmatter.inlineImages}>
           { body }
         </MDXRenderer>
       </Post>
@@ -79,6 +79,11 @@ export const pageQuery = graphql`
         slug
         title
         discussionId
+        inlineImages {
+          childImageSharp {
+            gatsbyImageData
+          }
+        }
       }
     }
   }
