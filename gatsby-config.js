@@ -17,30 +17,12 @@ module.exports = {
   },
   pathPrefix: "/",
   plugins: [
-    // "source-plugin",
+    "gatsby-plugin-image",
     "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
     "gatsby-plugin-cname",
     "gatsby-remark-images",
     "gatsby-plugin-layout",
-    // {
-    //   resolve: "source-plugin"
-    // },
-    // {
-    //   resolve: "gatsby-remark-github-discussions"
-    // },
-
-    // {
-    //   resolve: "gatsby-source-github-api",
-    //   options: {
-    //     url: "https://api.github.com/graphql", 
-    //     token: process.env.GITHUB_ACCESS_TOKEN,
-    //     graphQLQuery: githubDiscussionQuery,
-    //     variables: {
-    //       owner: process.env.OWNER,
-    //       repo: process.env.REPO,
-    //     }
-    //   }
-    // },
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
