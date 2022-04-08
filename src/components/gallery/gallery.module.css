@@ -3,9 +3,15 @@
 }
 
 .gallery-image {
-  margin-right: var(--space-sm);
+  margin: 0;
+}
+
+.gallery-image:not(:first-child) {
+  margin-left: var(--space-sm);
 }
 
 .gallery-caption {
-
+  margin-top: var(--space-xxs);
+  font-size: var(--text-xs);
+  text-align: center;
 }
