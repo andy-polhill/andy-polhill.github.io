@@ -23,7 +23,7 @@ export default function Blog({ data }) {
             date={ post.frontmatter.date }
           />
           <Rule />
-          <p>{post.excerpt}</p>
+          <p>{ post.frontmatter.description }</p>
         </article>
       )) }
     </Page>
@@ -38,7 +38,8 @@ Blog.propTypes = {
           excerpt: PropTypes.string.isRequired,
           frontmatter: PropTypes.shape({
             title: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired
+            date: PropTypes.string.isRequired,
+            description: PropTypes.string.isRequired
           }).isRequired
         })
       )
@@ -56,11 +57,11 @@ export const pageQuery = graphql`
       posts: nodes {
         frontmatter {
           date(fromNow: true)
+          description
           title
           author
           slug
         }
-        excerpt
         id
       }
     }
