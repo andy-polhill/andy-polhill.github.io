@@ -6228,10 +6228,10 @@ gatsby-plugin-image@^2.11.1:
     objectFitPolyfill "^2.3.5"
     prop-types "^15.7.2"
 
-gatsby-plugin-layout@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-3.6.0.tgz#711c947a89de7136a0ccc53090d2e89d7359a361"
-  integrity sha512-NoYj1ZgxGCjtj9pMMX9HMxHVw9u5+i1Unh7E/QZlgzibPf+Y010ZfidzZiCP6maRCzw1S4GBESAoW2muJyG2xA==
+gatsby-plugin-layout@^3.12.1:
+  version "3.12.1"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-layout/-/gatsby-plugin-layout-3.12.1.tgz#aae80455f8a8e329447d38f1b75bd47976eed118"
+  integrity sha512-1nuvntDB3+ODdbUos7Vnq6Ltq0UVNo9TvIl331JdavdSKKvpwEECGevl4BdVN/xCAzBNXmaStWgTn6UGNSIULg==
   dependencies:
     "@babel/runtime" "^7.15.4"
 
