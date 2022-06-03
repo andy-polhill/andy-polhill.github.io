@@ -1,0 +1,23 @@
+---
+title: Gatsby comments with GitHub Discussions (part 2)
+slug: blog/gatsby-comments-github-discussions-part-2/
+author: Andy Polhill
+date: 2022-06-03
+discussionNumber:
+discussionId:
+description: Part 2 of a 2 part guide to use GitHub Discussions as datastore for your Gatsby blog comments. In this episode we focus on getting the data from GitHub to the browser.
+---
+
+This is the first of a two part series where I talk through a recent side project that uses [GitHub Discussions](https://docs.github.com/en/discussions) as a datastore for blog comments.
+
+**[Part One](/blog/gatsby-comments-github-discussions-part-1/):** Focuses on getting the data into GitHub from the browser
+**Part Two:** Focuses on pulling the new data out at build time and rebuilding the site.
+
+## A quick recap
+At the end of the first blog post we were able to receive comments and add them to a respective GitHub discussion post. This was a great start, but we want those comments to be on the blog and not GitHub itself. This was an interesting learning experience for me, and was slightly trickier than I expected. I learnt a lot about Gatsby as part of this experiment and in particular the power of it's GraphQL interface. The crux of what we need to do here is to pull the comments from the GitHub API and make them available in Gatsbys GraphQL API. Once we have achieve that we are on relatively easy territory.
+
+## Creating a Gatsby source plugin
+A source plugin will allow us to do exactly what we need, the initial approach is [well documented](https://www.gatsbyjs.com/docs/how-to/plugins-and-themes/creating-a-source-plugin/).
+
+
+

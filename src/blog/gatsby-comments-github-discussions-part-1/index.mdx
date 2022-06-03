@@ -7,11 +7,11 @@ discussionNumber: 42
 discussionId: D_kwDOEZ2jC84AOZk_
 description: Part 1 of a 2 part guide to use GitHub Discussions as datastore for your Gatsby blog comments. In this episode we focus on getting the data into GitHub.
 ---
-  
+
 This is the first of a two part series where I talk through a recent side project that uses [GitHub Discussions](https://docs.github.com/en/discussions) as a datastore for blog comments.
 
-**Part One:** Focuses on getting the data into GitHub from the browser  
-**Part Two:** Focuses on pulling the new data out at build time and rebuilding the site.  
+**Part One:** Focuses on getting the data into GitHub from the browser
+**[Part Two](/blog/gatsby-comments-github-discussions-part-2/):** Focuses on pulling the new data out at build time and rebuilding the site.
 
 ## Why are you doing this?
 
@@ -46,7 +46,7 @@ D(4. Github Actions: Redeploy Site)-->|New build contains comments embedded in H
 ## Authentication, Tokens and cloud function later
 This all seemed like a relatively solid plan, you may have spotted the first flaw already. My intention was to trigger GitHub Actions via a [workflow dispatch](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#workflow_dispatch) (HTTP request). In order to do this you need a valid GitHub token. GitHub tokens do not have a huge [amount of granularity](https://github.com/dear-github/dear-github/issues/113), putting a token in the browser could expose more than is intended.
 
-At this point I had to compromise slightly on my "No Extra Providers" criteria. The only way I could be confident was to put a cloud function in the middle. The cloud function would effectively act as a gate keeper. It would provide some simple validation logic. If the function is happy with the comment it will append the [GitHub token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to the request that triggers the workflow.  
+At this point I had to compromise slightly on my "No Extra Providers" criteria. The only way I could be confident was to put a cloud function in the middle. The cloud function would effectively act as a gate keeper. It would provide some simple validation logic. If the function is happy with the comment it will append the [GitHub token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to the request that triggers the workflow.
 
 The flow now has an extra step, not one that makes me happy but one that I believe is necessary.
 
@@ -86,7 +86,7 @@ export default function CommentForm({ discussionId }) {
           body,
           discussionId,
           author,
-        }) 
+        })
       })
       setBody("")
       setAuthor("")
@@ -127,10 +127,10 @@ discussionId: D_kwDOEZ2jC84AOZk5
 ---
 ```
 
-Getting hold of the discussionId is a little bit tricky. The easiest way is to use the [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer) and run a query similar to the below. The output will contain the `id` which in this case is the discussionId that we need.  
+Getting hold of the discussionId is a little bit tricky. The easiest way is to use the [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer) and run a query similar to the below. The output will contain the `id` which in this case is the discussionId that we need.
 
-```graphql 
-query { 
+```graphql
+query {
   repository(name: "andy-polhill.github.io", owner: "andy-polhill") {
     discussions(first:100) {
       edges {
@@ -163,18 +163,18 @@ const workflow_id = process.env.GITHUB_WORKFLOW_ID
 const ref = process.env.GITHUB_BRANCH
 
 const github_actions_hook = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflow_id}/dispatches`
- 
+
 exports.receive_message = function(req, res) {
-   
+
   res.set('Access-Control-Allow-Origin', 'https://andypolhill.com')
   res.set('Access-Control-Allow-Methods', 'POST')
-    
+
   if (req.method === 'OPTIONS') {
     res.set('Access-Control-Allow-Headers', 'Content-Type')
     res.set('Access-Control-Max-Age', '3600')
     return res.status(204).send('')
   }
-   
+
   if (req.method === 'POST') {
     const { author, body, discussionId } = req.body
 
@@ -219,7 +219,7 @@ exports.receive_message = function(req, res) {
 
 ```
 - **Secrets:** To keep the GitHub Token out of the code I use a secret stored in the [Secret Manager](https://cloud.google.com/secret-manager).
-- ** CORS:** I haven't set up a custom domain for my cloud function. This means the browser has to make a [cross origin request](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) to the google domain. The Access Control headers and OPTIONS block of code cover this off. 
+- ** CORS:** I haven't set up a custom domain for my cloud function. This means the browser has to make a [cross origin request](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) to the google domain. The Access Control headers and OPTIONS block of code cover this off.
 - ** Validation:** This function acts as the gate keeper for the GitHub Action. Lets make it work for us by carrying out the input validation. I've kept most of the rules out for the sake of brevity, but you get the picture.
 - ** Trigger the Action:** The GitHub Action is triggered by an HTTP request (curently via the [Axios](https://axios-http.com/docs/intro) library). The format of the data that we post needs to be of the correct format. Where 'ref' is the branch and 'inputs' contains the parameters we are sending. To correctly format the URL for the workflow we need to know the 'workflowId'. GitHub actions have a consistent url for workflow dispatch `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflow_id}/dispatches`
 
@@ -277,6 +277,6 @@ That is the first part done, we are now able to get comments added to a GitHub d
 1. We added a discussion Id to each blog post.
 1. We added a comment form which posts the comment, author and discussion ID to a cloud function.
 1. The cloud function carries out some basic validation, and triggers a GitHub Actions workflow by attached a securely stored token.
-1. The GitHub Actions workflow recives the information and triggers a GraphQL mutation to update the discussion. 
+1. The GitHub Actions workflow recives the information and triggers a GraphQL mutation to update the discussion.
 
 
