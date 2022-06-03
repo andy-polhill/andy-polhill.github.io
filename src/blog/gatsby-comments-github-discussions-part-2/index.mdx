@@ -17,7 +17,82 @@ This is the first of a two part series where I talk through a recent side projec
 At the end of the first blog post we were able to receive comments and add them to a respective GitHub discussion post. This was a great start, but we want those comments to be on the blog and not GitHub itself. This was an interesting learning experience for me, and was slightly trickier than I expected. I learnt a lot about Gatsby as part of this experiment and in particular the power of it's GraphQL interface. The crux of what we need to do here is to pull the comments from the GitHub API and make them available in Gatsbys GraphQL API. Once we have achieve that we are on relatively easy territory.
 
 ## Creating a Gatsby source plugin
-A source plugin will allow us to do exactly what we need, the initial approach is [well documented](https://www.gatsbyjs.com/docs/how-to/plugins-and-themes/creating-a-source-plugin/).
+A source plugin will allow us to do exactly what we need. Follow the initial approach [documented here](https://www.gatsbyjs.com/docs/how-to/plugins-and-themes/creating-a-source-plugin/) to get going. All of the work for this plugin will be done with `gatsby-node`.
+
+## Defining the types
+GraphQL is strongly typed, this means that we can't just throw any old JSON at it. We first need to define what our nodes are going to look like. Later on this will make it easier for us to query the data as we can fully understand the structure of it. To define our own types we need to create and export a [`createSchemaCustomization`](https://www.gatsbyjs.com/docs/reference/graphql-data-layer/schema-customization/#fixing-field-types) method from our `gatsby-node` file. That method in turn needs to call `createTypes` with the schema for our node.
+
+```js
+exports.createSchemaCustomization = ({ actions }) => {
+  actions.createTypes(`
+    type Comment implements Node {
+      body: String
+      date: Date @dateformat(formatString: "MMMM DD, YYYY")
+      author: String
+      url: String
+      discussionId: String //
+    }`);
+};
+```
+
+The schema is fortunately a relatively simple one. We're naming it `Comment` and it implements `Node` meaning it can appear as a standard GraphQL node.
+- `body`: this is the body of the comment which will be a string
+- `date`: the data the comment was made. Gatsby provides additional [extensions](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createTypes) for adding formatting to dates
+- `author`: this is the name that the comment author provided
+- `url`: this is the url that the comment author may have provided
+- `discussionId`: this is the GitHub discussion id, it is what we will use to link the comment to the respective blog post.
+
+## Fetching the data
+This is where things get a bit tricky, my inexperience with Gatsby started to cause some problems. My naive approach was to just loop through each blog post and make a respective API call. However the lifecycle of Gatsby doesn't allow us to do it that way round. Instead what we need to do is get all of the comments in advance so that they can be linked to the blog posts when they are generated. To do this we need to create and export a [`sourceNodes`](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#sourceNodes) method in our `gatsby-node` file.
+
+Given we are going to be calling the GitHub GraphQL API I have opted to add an [additional dependency](https://www.npmjs.com/package/@octokit/graphql) to help us with that.
+
+`yarn add @octokit/graphql`
+
+```js
+const { graphql } = require("@octokit/graphql");
+
+exports.sourceNodes = async ({ actions, createNodeId }) => {
+  const { createNode } = actions;
+  const [repositoryOwner, repositoryName] = process.env.GITHUB_REPOSITORY_OWNER.split('/')
+
+  try {
+    const { repository } = await graphql(`{
+      repository(owner: "${repositoryOwner}", name: "${repositoryName}") {
+        discussions(first: 1000) {
+          edges {
+            node {
+              id,
+              comments(first: 1000) {
+                edges {
+                  node {
+                    body
+                    id
+                    createdAt
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`, {
+      headers: {
+        authorization: `token ${process.env.GITHUB_TOKEN}`,
+      },
+    });
+```
+
+Let's talk through this first part of the method. In the method call we are destructuring the following
+- [`actions`](https://www.gatsbyjs.com/docs/reference/config-files/node-api-helpers/#actions): this gives us access to a few different Gatsby actions with which we can modify Gatsby's internal state. The one we are interested in is `createNode`. This will unsurprsingly allow us to create a node in the GraphQL API.
+- [`createNodeId`](https://www.gatsbyjs.com/docs/reference/config-files/node-api-helpers/#createNodeId): this will enable us to create unique and stable node ids for our lovely comments.
+
+You'll notice that we also make reference to `GITHUB_REPOSITORY`. Given this process will be running in GitHub actions we will have acccess to all of the environment variables it [provides](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables). We can split this variable to retrieve the owner (in this case [andy-polhill](https://github.com/andy-polhill) and the repository ([andy-polhill.github.io](https://github.com/andy-polhill/andy-polhill.github.io)). GitHub does provide a seperate variable for owner, but not one for name, hence we have to split on the `/`.
+
+Next up is our query, which uses the `graphql` method from the octokit library.
+
+
+
 
 
 
