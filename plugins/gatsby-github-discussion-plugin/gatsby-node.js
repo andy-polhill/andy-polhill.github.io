@@ -6,12 +6,23 @@ dotenv.config();
 
 exports.onPreInit = () => console.log("Loaded gatsby-github-discussion-plugin")
 
+exports.createSchemaCustomization = ({ actions }) => {
+  actions.createTypes(`
+    type Comment implements Node {
+      body: String
+      date: Date @dateformat(formatString: "MMMM DD, YYYY")
+      discussionId: String
+      url: String
+      author: String
+    }`);
+};
+
 exports.createResolvers = ({ createResolvers }) => {
-  const resolvers = {
+  createResolvers({
     Mdx: {
       comments: {
         type: ["Comment"],
-        resolve(source, args, context) {
+        resolve(source, _, context) {
           return context.nodeModel.runQuery({
             query: {
               filter: {
@@ -24,23 +35,10 @@ exports.createResolvers = ({ createResolvers }) => {
         },
       },
     },
-  };
-  createResolvers(resolvers);
+  });
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions;
-  createTypes(`
-    type Comment implements Node {
-      body: String
-      date: Date @dateformat(formatString: "MMMM DD, YYYY")
-      discussionId: String
-      url: String
-      author: String
-    }`);
-};
-
-exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }, { discussionToken }) => {
+exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions;
   const categoryId = "DIC_kwDOEZ2jC84CAyEg";
   const [repositoryOwner, repositoryName] = process.env.GITHUB_REPOSITORY.split('/')
@@ -91,9 +89,6 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }, { d
           url,
         }
 
-        console.dir(comment);
-
-        const nodeContent = JSON.stringify(comment);
         createNode({
           id: createNodeId(`comments-${node.id}`),
           parent: null,
@@ -101,10 +96,10 @@ exports.sourceNodes = async ({ actions, createNodeId, createContentDigest }, { d
           internal: {
             type: "Comment",
             mediaType: "text/html",
-            content: nodeContent,
+            content: JSON.stringify(comment),
             contentDigest: createContentDigest(comment),
           },
-          discussionId, 
+          discussionId,
           ...comment
         });
       });

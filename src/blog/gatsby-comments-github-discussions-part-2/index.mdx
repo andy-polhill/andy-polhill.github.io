@@ -1,0 +1,217 @@
+---
+title: Gatsby comments with GitHub Discussions (part 2)
+slug: blog/gatsby-comments-github-discussions-part-2/
+author: Andy Polhill
+date: 2022-06-03
+discussionId:
+description: Part 2 of a 2 part guide to use GitHub Discussions as datastore for your Gatsby blog comments. In this episode we focus on getting the data from GitHub to the browser.
+---
+
+This is the second of a two part series where I talk through a recent side project that uses [GitHub Discussions](https://docs.github.com/en/discussions) as a datastore for blog comments.
+
+**[Part One](/blog/gatsby-comments-github-discussions-part-1/):** Focuses on getting the data into GitHub from the browser
+
+**Part Two:** Focuses on pulling the new data out at build time and rebuilding the site.
+
+## A quick recap
+At the end of the first blog post we were able to retrieve comments and add them to a respective GitHub discussion post. This was a great start, but we now want to get those comments onto the blog itself. This was an interesting learning experience for me, and was slightly trickier than I expected. I learnt a lot about Gatsby as part of this experiment and in particular the power of it's GraphQL interface. The crux of what we need to do here is to pull the comments from the GitHub API and make them available in the Gatsby GraphQL API. Once we have achieved that we are on relatively easy territory.
+
+## Creating a Gatsby source plugin
+A source plugin will allow us to do exactly what we need. Follow the initial approach [documented here](https://www.gatsbyjs.com/docs/how-to/plugins-and-themes/creating-a-source-plugin/) to get going. A source plugin is used to plumb additional data sources into Gatsby. All of the work for this plugin will be done within the `gatsby-node.js` file.
+
+## Defining the types
+GraphQL is strongly typed, this means that we can't just throw any old JSON at it. We first need to define what our nodes are going to look like. Later on this will make it easier for us to query the data and understand the structure of it. To define our own types we need to create and export a [`createSchemaCustomization`](https://www.gatsbyjs.com/docs/reference/graphql-data-layer/schema-customization/#fixing-field-types) method from our `gatsby-node.js` file. That method in turn needs to call the `createTypes` method which is provided within the parameters.
+
+```js
+exports.createSchemaCustomization = ({ actions }) => {
+  actions.createTypes(`
+    type Comment implements Node {
+      body: String
+      date: Date @dateformat(formatString: "MMMM DD, YYYY")
+      author: String
+      url: String
+      discussionId: String
+    }`);
+};
+```
+
+The schema is nice and simple without too many fields. We're naming it `Comment` and it implements `Node` meaning it can appear as a standard GraphQL node.
+- `body`: this is the body of the comment which will be a string
+- `date`: the date the comment was made. Gatsby provides additional [extensions](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createTypes) for adding formatting to dates
+- `author`: this is the name that the comment author provided
+- `url`: this is the url that the comment author may have provided
+- `discussionId`: this is the GitHub discussion id. It is what we will use to link the comment to the respective blog post.
+
+## Fetching the data
+This is where things get a bit tricky. My naive expectation was to just loop through each blog post and make a respective API call. However the lifecycle of Gatsby doesn't seem to allow us to do it that way round. Instead we need to get all of the comments in advance so that they can be linked to the blog posts when they are generated. To do this we need to create and export a [`sourceNodes`](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#sourceNodes) method in our `gatsby-node.js` file.
+
+Given we are going to be calling the GitHub GraphQL API I have opted to add an the [@octokit/graphql](https://www.npmjs.com/package/@octokit/graphql) node module. This extracts away a lot of the low level code required to make an API call to GitHub.
+
+```js
+const { graphql } = require("@octokit/graphql");
+
+exports.sourceNodes = async ({ actions, createNodeId }) => {
+  const { createNode } = actions;
+  const [repositoryOwner, repositoryName] = process.env.GITHUB_REPOSITORY_OWNER.split('/')
+
+  try {
+    const { repository } = await graphql(`{
+      repository(owner: "${repositoryOwner}", name: "${repositoryName}") {
+        discussions(first: 100) {
+          edges {
+            node {
+              id,
+              comments(first: 100) {
+                edges {
+                  node {
+                    body
+                    id
+                    createdAt
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }`, {
+      headers: {
+        authorization: `token ${process.env.GITHUB_TOKEN}`,
+      },
+    });
+    ... // continued below
+```
+
+Let's talk through this first part of the method. In the method signature we are destructuring the following
+- [`actions`](https://www.gatsbyjs.com/docs/reference/config-files/node-api-helpers/#actions): this gives us access to a few different Gatsby actions with which we can modify Gatsby's internal state. The one we are interested in is `createNode`. This will unsurprsingly allow us to create a node in the GraphQL API.
+- [`createNodeId`](https://www.gatsbyjs.com/docs/reference/config-files/node-api-helpers/#createNodeId): this will enable us to create unique and stable node id for our lovely comment.
+
+You'll notice that we also make reference to `GITHUB_REPOSITORY`. Given this process will be running in GitHub actions we will have acccess to all of the environment variables it [provides](https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables). We can split this variable to retrieve the owner (in this case [andy-polhill](https://github.com/andy-polhill) and the repository ([andy-polhill.github.io](https://github.com/andy-polhill/andy-polhill.github.io)). These are the owner and repository fields we will be using to query the API.
+
+Next up is our query, which uses the `graphql` method from the octokit library. This slightly lengthy looking query is fetching the first 100 discussions and then the first 100 comments from those discussions. I wasn't happy with the hardcoded nature of those numbers, but it seemed to be the only way to make it work. One positive benefit is that we only have to make one API call. For my humble blog that is a lot more comments than I expect to get. You can test this query out on the [GitHub GraphQL Explorer](https://docs.github.com/en/graphql/overview/explorer) and potentially tailor it to your personal needs.
+
+The second parameter that we send to the `graphql` method is the headers for the http call. We only need `authorization` and thankfully GitHub actions will provide us with a [`GITHUB_TOKEN`](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) which has the correct privileges to make the call.
+
+### A quick diversion into Frontmatter
+You may remember from the first blog post that we decided to append additional meta data to each comment using [frontmatter](https://middlemanapp.com/basics/frontmatter/). Now that we are reading those comments back, we need to extract the frontmatter from the body of the comment. We will do that using an additional dependency called [gray-matter](https://www.npmjs.com/package/gray-matter). You'll need to add this dependency to the top of your file alongside the Octokit one.
+
+### Parsing the response data
+The second part of the `sourceNodes` method is where we parse the content of the API call and create the respective Gatsby nodes.
+
+```js
+  ... // continued
+
+    repository.discussions.edges.forEach(({ node }) => {
+
+      const { comments, id: discussionId } = node;
+      comments.edges.forEach(({ node }) => {
+
+        const { content, data } = matter(node.body);
+        const { author, url } = data;
+        const comment = {
+          body: content,
+          date: new Date(node.createdAt),
+          author,
+          url,
+        }
+
+        createNode({
+          id: createNodeId(`comments-${node.id}`),
+          parent: null,
+          children: [],
+          internal: {
+            type: "Comment",
+            mediaType: "text/html",
+            content: JSON.stringify(comment),
+            contentDigest: createContentDigest(comment),
+          },
+          discussionId,
+          ...comment
+        });
+      });
+    });
+  } catch(e) {
+    console.error(e);
+  }
+```
+
+In this section of code we are looping through each of the discussions and subsequent comments. For each comment we pass the node body into the `matter` method to seperate the frontmatter `data` from the `content`. We can then create a JSON object for our comment and pass that into the `createNode` method. The node does not have any parent or children nodes that we need to concern ourselves with.
+
+The [`internal`](https://www.gatsbyjs.com/docs/reference/config-files/actions/#createNode) fields within createNode are used to help us generate the correct data. The `type` field tells Gatsby to use the `Comment` node that we previously generated. Once this method runs all of our delightful comments will be within Gatsby, but wait, we somehow need to link them to the correct blog posts.
+
+## Linking the Comment Nodes to the Blog post.
+To link our Comment nodes to their respective Blog posts we can add a [`createResolvers`](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/#createResolvers) method to our `gatsby-node` file. The method will look something like this.
+
+```js
+exports.createResolvers = ({ createResolvers }) => {
+  createResolvers({
+    Mdx: {
+      comments: {
+        type: ["Comment"],
+        resolve(source, _, context) {
+          return context.nodeModel.runQuery({
+            query: {
+              filter: {
+                discussionId: { eq: source.frontmatter.discussionId },
+              },
+            },
+            type: "Comment",
+            firstOnly: false,
+          });
+        },
+      },
+    },
+  });
+};
+```
+
+We are creating an additional resolver for the `Mdx` file type. This is the file type for our blog posts. We are adding an additional field to this type of node called `comments`. Within the comments sections we tell it the to expect the `Comment` type of node that we previously created. We then provide a `resolve` method to find those comments.
+
+In the resolve method we are running a query to find all comments with a discussionId that matches that our blog post. This will create the link between blog post and comment, go ahead and try it out on your local GraphQL API. You can use the [`dotenv`](https://www.npmjs.com/package/dotenv) package to add those environment variables that would normally be available in GitHub Actions.
+
+## Displaying the Comments on the Page.
+At this stage our comments are within the GraphQL API and linked to their respective Blog Posts. We are very nearly there, but we do need to render the comments on the page.
+
+In this blog I use a file called `{mdx.slug}.js` to render the blog posts. Within that file I have a [`pageQuery`](https://www.gatsbyjs.com/docs/how-to/querying-data/page-query/) which fetches the relevant data for the blog post. I can now simply add some additional fields to that query in order to retrieve the comments.
+
+```js
+export const pageQuery = graphql`
+  query($id: String!) {
+    mdx(id: { eq: $id }) {
+      body
+      comments {
+        body
+        date(formatString: "MMMM DD, YYYY")
+        author
+        url
+      }
+    }
+  }
+}`
+```
+
+From here you should be able to work out the rest. I have a higher level React component called `Comments`. Within that component I loop through the individual comments and render an additional singular `Comment` component.
+
+## Bonus Points validation and notifications
+The observant among you will have noticed that I do not have any form of validation on this system. Given the scale of my blog I'm ok to try that out for a while. If things get too spammy there are lots of options that I could look into.
+
+One thing I do want is to be notified of any new comments. This gives me the option to have a quick scan of the comment and either respond, or delete if it happens to be spam. There are a few ways that you could set up notifications. I opted to set up a simple Slack notification which will prompt me when a new comment is posted.
+
+There is a simple [action slack](https://github.com/marketplace/actions/slack-notify) notification that does most of the work for me. In my `comment.yml` workflow I add the following job.
+
+```yml
+slack-notification:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()
+```
+
+## Conclusion
+This was more work than I was expecting when I set out on this experiment. Using an off the shelf solution would certainly be less effort. That said, I am happy to have achieved most of my original criteria. This solution doesn't rely on any additional 3rd parties, the cloud function is an irritating neccessity. There are no cookies required and users do not need to login. I like that I have full control over the look and feel of the comments. I could easily extend this approach for further customizations. The code I use in production is [available here](https://github.com/andy-polhill/andy-polhill.github.io). I hope you found this useful, if you did why not go ahead and leave a comment 😉.
+
