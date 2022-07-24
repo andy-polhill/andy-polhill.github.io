@@ -27,7 +27,7 @@
     "gatsby-link": "^4.4.0",
     "gatsby-plugin-cname": "^1.0.0",
     "gatsby-plugin-image": "^2.11.1",
-    "gatsby-plugin-layout": "^3.6.0",
+    "gatsby-plugin-layout": "^3.19.0",
     "gatsby-plugin-mdx": "^3.5.0",
     "gatsby-plugin-plausible": "^0.0.7",
     "gatsby-plugin-react-helmet": "^5.3.0",
