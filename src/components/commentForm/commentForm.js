@@ -42,7 +42,7 @@ export default function CommentForm({ discussionId, addComment }) {
       setAuthor("");
       setUrl("");
       addComment({body, author, url, pending: true});
-      window.plausible && window.plausible("comment");
+      window.plausible && window.plausible("comment", { props: { body, author, url } });
     } catch(error) {
       setError(error);
     }
