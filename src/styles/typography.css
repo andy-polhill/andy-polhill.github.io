@@ -138,6 +138,10 @@ code {
   word-break: break-word;
 }
 
+blockquote {
+  font-style: italic;
+}
+
 textarea,
 input,
 button {
