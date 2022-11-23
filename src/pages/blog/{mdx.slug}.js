@@ -16,8 +16,8 @@ deckDeckGoHighlightElement();
 
 
 export default function BlogPost({ data }) {
-  const { body, comments, description, frontmatter } = data.mdx;
-  const { author, date, title, discussionId } = frontmatter;
+  const { body, comments, frontmatter } = data.mdx;
+  const { author, date, title, description, discussionId } = frontmatter;
 
   return (
     <Page>
