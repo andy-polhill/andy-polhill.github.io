@@ -50,20 +50,39 @@ Blog.propTypes = {
 
 export const pageQuery = graphql`
   query MyQuery {
-    blog: allMdx(
-        filter: { fileAbsolutePath: {regex: "/(blog)/"  }}
-        sort: { fields: [frontmatter___date, frontmatter___title], order: DESC }
-      ) {
-      posts: nodes {
-        frontmatter {
-          date(fromNow: true)
-          description
-          title
-          author
-          slug
+    allMdx(filter: { gatsbyPath: {regex: "/(blog)/"} }) {
+      totalCount
+      edges {
+        node {
+          frontmatter {
+            date
+            description
+            title
+            author
+            slug
+          }
         }
-        id
       }
     }
   }
 `
+
+// export const pageQuery = graphql`
+//   query MyQuery {
+//     blog: allMdx(
+//         filter: { contentFilePath: {regex: "/(blog)/"  }}
+//         sort: { fields: [frontmatter___date, frontmatter___title], order: DESC }
+//       ) {
+//       posts: nodes {
+//         frontmatter {
+//           date(fromNow: true)
+//           description
+//           title
+//           author
+//           slug
+//         }
+//         id
+//       }
+//     }
+//   }
+// `

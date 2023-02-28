@@ -17,12 +17,12 @@ module.exports = {
   },
   pathPrefix: "/",
   plugins: [
-    "gatsby-plugin-image",
-    "gatsby-plugin-sharp",
-    "gatsby-transformer-sharp",
-    "gatsby-plugin-cname",
-    "gatsby-remark-images",
-    "gatsby-plugin-layout",
+    // "gatsby-plugin-image",
+    // "gatsby-plugin-sharp",
+    // "gatsby-transformer-sharp",
+    // "gatsby-plugin-cname",
+    // "gatsby-remark-images",
+    // "gatsby-plugin-layout",
     {
       resolve: "gatsby-plugin-sitemap",
       options: {
@@ -46,55 +46,55 @@ module.exports = {
       resolve: "gatsby-plugin-mdx",
       options: {
         extensions: [".md", ".mdx"],
-        gatsbyRemarkPlugins: [
-          {
-            resolve: 'gatsby-remark-mermaid',
-            options: {
-              language: 'mermaid',
-              theme: 'neutral',
-              mermaidOptions: {
-                themeCSS: `
-                  .node rect { fill: var(--color-mermaid-bg); }
+        // gatsbyRemarkPlugins: [
+        //   {
+        //     resolve: 'gatsby-remark-mermaid',
+        //     options: {
+        //       language: 'mermaid',
+        //       theme: 'neutral',
+        //       mermaidOptions: {
+        //         themeCSS: `
+        //           .node rect { fill: var(--color-mermaid-bg); }
                   
-                  .node .label {
-                    font-family: \"Libre Baskeville\", Georgia, serif;
-                    color: var(--color-body)
-                  }
+        //           .node .label {
+        //             font-family: \"Libre Baskeville\", Georgia, serif;
+        //             color: var(--color-body)
+        //           }
 
-                  .edgeLabels .edgeLabel {
-                    background-color: var(--sky-bottom);
-                    font-family: \"Libre Baskeville\", Georgia, serif;
-                    color: var(--color-body);
-                  }
-                `
-              }
-            }
-          },
-          {
-            resolve: "gatsby-remark-highlight-code",
-            options: {
-              terminal: "carbon",
-              theme: "one-light",
-            },
-          },
-          {
-            resolve: "gatsby-github-discussion-plugin"
-          },
-          {
-            resolve: "gatsby-remark-images",
-            options: {
-              maxWidth: 840,
-              wrapperStyle: 'margin:0;',
-            },
-          },
-          {
-            resolve: "gatsby-remark-external-links",
-            options: {
-              target: "_blank",
-              rel: "noopener"
-            }
-          }
-        ]
+        //           .edgeLabels .edgeLabel {
+        //             background-color: var(--sky-bottom);
+        //             font-family: \"Libre Baskeville\", Georgia, serif;
+        //             color: var(--color-body);
+        //           }
+        //         `
+        //       }
+        //     }
+        //   },
+        //   {
+        //     resolve: "gatsby-remark-highlight-code",
+        //     options: {
+        //       terminal: "carbon",
+        //       theme: "one-light",
+        //     },
+        //   },
+        //   {
+        //     resolve: "gatsby-github-discussion-plugin"
+        //   },
+        //   {
+        //     resolve: "gatsby-remark-images",
+        //     options: {
+        //       maxWidth: 840,
+        //       wrapperStyle: 'margin:0;',
+        //     },
+        //   },
+        //   {
+        //     resolve: "gatsby-remark-external-links",
+        //     options: {
+        //       target: "_blank",
+        //       rel: "noopener"
+        //     }
+        //   }
+        // ]
       }
     },
     {
@@ -111,6 +111,5 @@ module.exports = {
         path: `${__dirname}/src/images/`,
       },
     },
-    "gatsby-plugin-react-helmet",
   ]
 };

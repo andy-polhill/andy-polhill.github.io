@@ -6,15 +6,30 @@ dotenv.config();
 
 exports.onPreInit = () => console.log("Loaded gatsby-github-discussion-plugin")
 
+
 exports.createSchemaCustomization = ({ actions }) => {
   actions.createTypes(`
     type Comment implements Node {
       body: String
-      date: Date @dateformat(formatString: "MMMM DD, YYYY")
+      date: String
       discussionId: String
       url: String
       author: String
     }`);
+    // date: Date @dateformat(formatString: "MMMM DD, YYYY")
+
+
+  actions.createTypes(`
+    type MdxFrontmatter {
+      title: String
+      author: String
+      slug: String
+      date: Date
+      discussionId: String
+      description: String
+      inlineImages: [String]
+    }
+  `);
 };
 
 exports.createResolvers = ({ createResolvers }) => {
@@ -23,7 +38,7 @@ exports.createResolvers = ({ createResolvers }) => {
       comments: {
         type: ["Comment"],
         resolve(source, _, context) {
-          return context.nodeModel.runQuery({
+          return context.nodeModel.findOne({
             query: {
               filter: {
                 discussionId: { eq: source.frontmatter.discussionId },

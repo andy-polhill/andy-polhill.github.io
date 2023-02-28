@@ -19,6 +19,8 @@ export default function BlogPost({ data }) {
   const { body, comments, frontmatter } = data.mdx;
   const { author, date, title, description, discussionId } = frontmatter;
 
+  // inlineImages={frontmatter.inlineImages}
+
   return (
     <Page>
       <SEO
@@ -30,7 +32,7 @@ export default function BlogPost({ data }) {
           author={ author }
           date={ date } />
         <Rule />
-        <MDXRenderer inlineImages={frontmatter.inlineImages}>
+        <MDXRenderer >
           { body }
         </MDXRenderer>
       </Post>
@@ -62,29 +64,31 @@ BlogPost.propTypes = {
   }).isRequired
 }
 
-export const pageQuery = graphql`
+export const query = graphql`
   query($id: String!) {
     mdx(id: { eq: $id }) {
       body
       comments {
+        date
         body
-        date(formatString: "MMMM DD, YYYY")
         author
         url
       }
       frontmatter {
-        date(formatString: "MMMM DD, YYYY")
+        date
         description
         author
-        slug
         title
         discussionId
-        inlineImages {
-          childImageSharp {
-            gatsbyImageData
-          }
-        }
       }
     }
   }
 `
+
+// date(formatString: "MMMM DD, YYYY")
+
+        // inlineImages {
+        //   childImageSharp {
+        //     gatsbyImageData
+        //   }
+        // }

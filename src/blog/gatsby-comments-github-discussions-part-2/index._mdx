@@ -1,3 +1,4 @@
+
 ---
 title: Gatsby comments with GitHub Discussions (part 2)
 slug: blog/gatsby-comments-github-discussions-part-2/
@@ -149,7 +150,7 @@ exports.createResolvers = ({ createResolvers }) => {
       comments: {
         type: ["Comment"],
         resolve(source, _, context) {
-          return context.nodeModel.runQuery({
+          return context.nodeModel.findOne({
             query: {
               filter: {
                 discussionId: { eq: source.frontmatter.discussionId },

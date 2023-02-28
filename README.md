@@ -1,7 +1,8 @@
 ---
-slug: ""
 date: "2021-04-01"
 title: "Andy Polhill - Engineering Manager"
+slug: "about"
+description: "TEST"
 ---
 
 # 👋 Hello there, I'm Andy Polhill. I'm an _Engineering Manager._
