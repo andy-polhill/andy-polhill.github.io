@@ -10,7 +10,6 @@ on:
   push:
     branches: [ main, status-page ]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,62 +17,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '17'
 
-      - name: Cache dependencies
-        uses: actions/cache@v4.0.0
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      - name: install dependencies
-        run: yarn install
-
-      - name: build
+      - name: Build
         run: yarn build -- --prefix-paths
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: deploy
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-
-  # fetch-top-tracks:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: Setup
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: '14'
-
-  #     - name: Cache dependencies
-  #       uses: actions/cache@v3.0.1
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
-
-  #     - name: install dependencies
-  #       run: yarn install
-
-  #     - name: get top tracks
-  #       id: top-tracks
-  #       uses: ./.github/actions/top-tracks
-  #       with:
-  #         time_range: 'short_term'
-  #         client_id: ${{ secrets.SPOTIFY_ID }}
-  #         client_secret: ${{ secrets.SPOTIFY_SECRET }}
-
-
-
