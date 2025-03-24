@@ -20,7 +20,7 @@ export default function Header({}) {
             </Link>
           </li>
           <li className={` ${styles.navItem} ${styles.socialIcons}` }>
-            <a href="https://twitter.com/andy-polhill" target="_blank">
+            <a href="https://bsky.app/profile/andy-polhill.bsky.social" target="_blank">
               <TwitterIcon />
             </a>
             <a href="https://linkedin.com/in/andy-polhill" target="_blank">
